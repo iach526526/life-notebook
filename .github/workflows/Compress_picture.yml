@@ -16,10 +16,11 @@ jobs:
       - name: Install cwebp for image conversion
         run: sudo apt-get update && sudo apt-get install -y webp
 
-      - name: Find and convert images to WebP
+      - name: Find, convert images to WebP, and delete originals
         run: |
           find . -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read img; do
-            cwebp "$img" -o "${img%.*}.webp" -q 80
+            cwebp "$img" -o "${img%.*}.webp" -q 80  # Convert to WebP
+            rm "$img"  # Delete the original file
           done
 
       - name: Commit and push changes
@@ -27,7 +28,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Convert images to WebP format"
+          git commit -m "Convert images to WebP format and delete originals"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
