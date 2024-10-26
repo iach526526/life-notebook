@@ -29,12 +29,16 @@ jobs:
             sed -i 's/\.\(png\|jpg\|jpeg\))/\.webp)/g' "$md_file"
           done
 
-      - name: Commit and push changes
+      - name: Check for changes and commit if needed
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Convert images to WebP format, delete originals, and update Markdown paths"
-          git push
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "Convert images to WebP format, delete originals, and update Markdown paths"
+            git push
+          else
+            echo "No changes to commit"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
