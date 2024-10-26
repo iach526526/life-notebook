@@ -23,12 +23,18 @@ jobs:
             rm "$img"  # Delete the original file
           done
 
+      - name: Update Markdown file image paths to .webp
+        run: |
+          find . -type f -name "*.md" | while read md_file; do
+            sed -i 's/\.\(png\|jpg\|jpeg\))/\.webp)/g' "$md_file"
+          done
+
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Convert images to WebP format and delete originals"
+          git commit -m "Convert images to WebP format, delete originals, and update Markdown paths"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
