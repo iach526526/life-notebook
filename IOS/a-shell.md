@@ -21,7 +21,7 @@ a-shell 設定檔放在 ~/Documents/.profile 和 ~/Documents/.bashrc 這兩個�
 
 當滿屏的時候使用這個指令,畫面會被切一半顯示兩個終端機，兩個以上再切就會覆蓋，不能像 tmux 一直分割，要點視窗上方三個點切換。配合 slide over 滑動置前我測試最多可以叫出三個 a-shell 同時顯示。
 
-![newWindow](./newWindow.jpeg)
+![newWindow](./newWindow.webp)
 
 不過我只能在 iPad 多開視窗，iPhone 不行，我猜是螢幕不夠大造成的限制。
 
@@ -36,7 +36,7 @@ a-shell 設定檔放在 ~/Documents/.profile 和 ~/Documents/.bashrc 這兩個�
 ### 特殊檔案指令
 
 現在我們要切換試著切換目錄，每次打開 a-shell 會在 ~/Documents 目錄底下，實際上是在裝置底下 a-shell 的資料夾。
-![a-shell 實際存放位置](a-shell-physical-folder.png)
+![a-shell 實際存放位置](a-shell-physical-folder.webp)
 
 不能直接寫 Document 以上的 ```~```路徑的內容，有興趣可以 cd 過去看一下，我們安裝的套件會存在 ~/Library。
 
