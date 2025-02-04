@@ -1,0 +1,44 @@
+name: Convert Images to WebP
+
+on:
+  push:
+    branches:
+      - main  # Run on pushes to the main branch
+
+jobs:
+  convert_images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install cwebp for image conversion
+        run: sudo apt-get update && sudo apt-get install -y webp
+
+      - name: Find, convert images to WebP, and delete originals
+        run: |
+          find . -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read img; do
+            cwebp "$img" -o "${img%.*}.webp" -q 80  # Convert to WebP
+            rm "$img"  # Delete the original file
+          done
+
+      - name: Update Markdown file image paths to .webp
+        run: |
+          find . -type f -name "*.md" | while read md_file; do
+            sed -i 's/\.\(png\|jpg\|jpeg\))/\.webp)/g' "$md_file"
+          done
+
+      - name: Check for changes and commit if needed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "Convert images to WebP format, delete originals, and update Markdown paths"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
